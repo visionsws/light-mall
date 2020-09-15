@@ -1,24 +1,59 @@
 package com.vicente.lightmall.common;
 
 import com.vicente.lightmall.entity.LightUser;
+import com.vicente.lightmall.entity.Permission;
+import com.vicente.lightmall.entity.Role;
 import com.vicente.lightmall.service.LightUserService;
+import com.vicente.lightmall.service.RolePermissionService;
+import com.vicente.lightmall.service.UserRoleService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ShiroRealm extends AuthorizingRealm {
 
     @Autowired
     private LightUserService userService;
 
+    @Autowired
+    private UserRoleService userRoleService;
+
+    @Autowired
+    private RolePermissionService rolePermissionService;
+
     /**
      * 获取用户角色和权限
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
-        return null;
+        LightUser user  = (LightUser)principal.getPrimaryPrincipal();
+        String userName = user.getUserName();
+        System.out.println("用户" + userName + "获取权限-----ShiroRealm.doGetAuthorizationInfo");
+        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+
+        // 获取用户角色集
+        List<Role> roleList = userRoleService.getUserRole(userName);
+        Set<String> roleSet = new HashSet<String>();
+        for (Role r : roleList) {
+            roleSet.add(r.getName());
+        }
+        simpleAuthorizationInfo.setRoles(roleSet);
+
+        // 获取用户权限集
+        List<Permission> permissionList = rolePermissionService.findByUserName(userName);
+        Set<String> permissionSet = new HashSet<String>();
+        for (Permission p : permissionList) {
+            permissionSet.add(p.getPerCode());
+        }
+        simpleAuthorizationInfo.setStringPermissions(permissionSet);
+        return simpleAuthorizationInfo;
     }
 
     /**

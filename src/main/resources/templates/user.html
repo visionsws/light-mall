@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${value}]]</title>
+</head>
+<body>
+    <div>[[${user.userName}]]</div>
+    <div>[[${user.realName}]]</div>
+    <p>[[${value}]]</p>
+    <a th:href="@{/index}">返回</a>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vicente.lightmall.mapper.RolePermissionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.vicente.lightmall.entity.RolePermission">
+        <id column="id" property="id" />
+        <result column="role_id" property="roleId" />
+        <result column="permission_id" property="permissionId" />
+    </resultMap>
+
+    <select id="findByUserName" resultMap="com.vicente.lightmall.mapper.PermissionMapper.BaseResultMap">
+        select p.id,p.per_code,p.name from role r
+            left join user_role ur on(r.id = ur.role_id)
+            left join user u on(u.id = ur.user_id)
+            left join role_permission rp on(rp.role_id = r.id)
+            left join permission p on(p.id = rp.permission_id )
+        where u.username = #{userName}
+    </select>
+
+</mapper>
