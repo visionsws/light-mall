@@ -63,6 +63,10 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/light-user/**", "anon");
         filterChainDefinitionMap.put("/loginBy", "anon");
+        filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
+        filterChainDefinitionMap.put("/v2/**","anon");
+        filterChainDefinitionMap.put("/swagger-resources/**", "anon");
         filterChainDefinitionMap.put("/logout", "logout");
         // 根据用户的角色赋予相应的权限
         // filterChainDefinitionMap.put("/add", "roles[admin]");
